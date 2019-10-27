@@ -120,17 +120,17 @@ template <typename T>
 void neural_net<T>::backward_cpu()
 {
 	da3_ = 1 / n3 * 2 * (a3_.array() - sin(x_));
-	dz3_ = sigmoid(a3_.array()) * (1 - sigmoid(a3_.array())) * da3_.array();
+	dz3_ = a3_.array() * (1 - a3_.array()) * da3_.array();
 	db3_ = dz3_;
 	dw3_ = dz3_ * a2_.transpose();
 	//
 	da2_ = w3_.transpose() * dz3_;
-	dz2_ = sigmoid(a2_.array()) * (1 - sigmoid(a2_.array())) * da2_.array();
+	dz2_ = a2_.array() * (1 - a2_.array()) * da2_.array();
 	db2_ = dz2_;
 	dw2_ = dz2_ * a1_.transpose();
 
 	da1_ = w2_.transpose() * dz2_;
-	dz1_ = sigmoid(a1_.array()) * (1 - sigmoid(a1_.array())) * da1_.array();
+	dz1_ = a1_.array() * (1 - a1_.array()) * da1_.array();
 	db1_ = dz1_;
 	dw1_ = dz1_ * x_;
 }
@@ -138,12 +138,12 @@ void neural_net<T>::backward_cpu()
 template <typename T>
 void neural_net<T>::optimize()
 {
-	w1_ -= get_lr() * dw1_;
-	b1_ -= get_lr() * db1_;
-	w2_ -= get_lr() * dw2_;
-	b2_ -= get_lr() * db2_;
-	w3_ -= get_lr() * dw3_;
-	b3_ -= get_lr() * db3_;
+	w1_ -= lr_ * dw1_;
+	b1_ -= lr_ * db1_;
+	w2_ -= lr_ * dw2_;
+	b2_ -= lr_ * db2_;
+	w3_ -= lr_ * dw3_;
+	b3_ -= lr_ * db3_;
 }
 
 
